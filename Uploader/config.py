@@ -69,7 +69,7 @@ class Config(object):
     # watermark file
     DEF_WATER_MARK_FILE = ""
     LOG_CHANNEL = int(os.environ.get("LOG_CHANNEL", -100))
-    OWNER_ID = int(os.environ.get("OWNER_ID", ))
+    OWNER_ID = int(os.environ.get("OWNER_ID", ""))
     BOT_USERNAME = os.environ.get("BOT_USERNAME", "")
     ADL_BOT_RQ = {}
     AUTH_USERS = list({int(x) for x in os.environ.get("AUTH_USERS", "0").split()})
