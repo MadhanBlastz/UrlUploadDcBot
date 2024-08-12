@@ -20,9 +20,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE
 
-from pyrogram import Client, idle
+from pyrogram import Client, idle, errors
 from Uploader.config import Config
 import os
+import time
 
 import logging
 logging.basicConfig(level=logging.DEBUG,
@@ -35,21 +36,33 @@ if __name__ == "__main__":
 
     if not os.path.isdir(Config.DOWNLOAD_LOCATION):
         os.makedirs(Config.DOWNLOAD_LOCATION)
-        logger.info("download location created for users") 
+        logger.info("Download location created for users") 
 
     if not os.path.isdir(Config.ADMIN_LOCATION):
         os.makedirs(Config.ADMIN_LOCATION)
-        logger.info("download location created for admin")
+        logger.info("Download location created for admin")
         
     if not os.path.isdir(Config.CREDENTIALS_LOCATION):
         os.makedirs(Config.CREDENTIALS_LOCATION)
         logger.info("Asset download location created")
 
     plugins = dict(root="Uploader")
-    Uploadbot = Client("All-Url-Uploader",
-                       bot_token=Config.BOT_TOKEN,
-                       api_id=Config.API_ID,
-                       api_hash=Config.API_HASH,
-                       plugins=plugins)
-    Uploadbot.run()
-    idle()
+
+    while True:
+        try:
+            Uploadbot = Client("All-Url-Uploader",
+                               bot_token=Config.BOT_TOKEN,
+                               api_id=Config.API_ID,
+                               api_hash=Config.API_HASH,
+                               plugins=plugins)
+            Uploadbot.run()
+            idle()
+        except errors.BadMsgNotification as e:
+            if e.error_code == 16:
+                logger.error("Time synchronization issue detected. Retrying in 5 seconds...")
+                time.sleep(5)
+                continue  # Retry starting the bot
+        except Exception as e:
+            logger.error(f"An unexpected error occurred: {e}")
+            break  # Exit the loop on other exceptions
+
