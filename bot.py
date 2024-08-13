@@ -58,11 +58,12 @@ if __name__ == "__main__":
             Uploadbot.run()
             idle()
         except errors.BadMsgNotification as e:
-            if e.error_code == 16:
+            if e.x == 16:  # Check if the error code is 16
                 logger.error("Time synchronization issue detected. Retrying in 5 seconds...")
                 time.sleep(5)
                 continue  # Retry starting the bot
         except Exception as e:
             logger.error(f"An unexpected error occurred: {e}")
             break  # Exit the loop on other exceptions
+
 
