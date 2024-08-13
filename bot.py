@@ -27,7 +27,7 @@ import time
 
 import logging
 logging.basicConfig(level=logging.DEBUG,
-                    format='%(asctime)s - %(name)s - %(levelname=s - %(message)s')
+                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
@@ -63,4 +63,6 @@ if __name__ == "__main__":
             continue  # Retry starting the bot
         except Exception as e:
             logger.error(f"An unexpected error occurred: {e}")
-            break  # Exit the loop on other exceptions
+            logger.error("Retrying in 5 seconds...")
+            time.sleep(5)
+            continue  # Retry starting the bot after a general exception
