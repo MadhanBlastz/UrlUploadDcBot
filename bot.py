@@ -27,7 +27,7 @@ import time
 
 import logging
 logging.basicConfig(level=logging.DEBUG,
-                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+                    format='%(asctime)s - %(name)s - %(levelname=s - %(message)s')
 logger = logging.getLogger(__name__)
 
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
@@ -36,12 +36,12 @@ if __name__ == "__main__":
 
     if not os.path.isdir(Config.DOWNLOAD_LOCATION):
         os.makedirs(Config.DOWNLOAD_LOCATION)
-        logger.info("Download location created for users") 
+        logger.info("Download location created for users")
 
     if not os.path.isdir(Config.ADMIN_LOCATION):
         os.makedirs(Config.ADMIN_LOCATION)
         logger.info("Download location created for admin")
-        
+
     if not os.path.isdir(Config.CREDENTIALS_LOCATION):
         os.makedirs(Config.CREDENTIALS_LOCATION)
         logger.info("Asset download location created")
@@ -58,12 +58,9 @@ if __name__ == "__main__":
             Uploadbot.run()
             idle()
         except errors.BadMsgNotification as e:
-            if e.x == 16:  # Check if the error code is 16
-                logger.error("Time synchronization issue detected. Retrying in 5 seconds...")
-                time.sleep(5)
-                continue  # Retry starting the bot
+            logger.error("BadMsgNotification error detected. Possible time synchronization issue. Retrying in 5 seconds...")
+            time.sleep(5)
+            continue  # Retry starting the bot
         except Exception as e:
             logger.error(f"An unexpected error occurred: {e}")
             break  # Exit the loop on other exceptions
-
-
